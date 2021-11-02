@@ -1,0 +1,7 @@
+**/logs
+*.env
+**/__pycache__
+seedDB.py
+**/.vs
+/database/playerTracker.db
+api_requests_cache.sqlite
