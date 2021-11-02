@@ -72,6 +72,8 @@ async def on_message(message):
                 print(command[0].strip())
                 print(command[1].strip())
                 print(command[2].strip())
+                if command[0] == "" | command[1] == "" | command[2] == "":
+                    await message.channel.send('Malformed Request, please try again.')
                 params = {'reportedBy': 'testName', 'reportedName': command[0].strip(), 'server': command[1].strip(), 'cause': command[2].strip(), 'commendation': 1}
                 print(params)
                 REPORTSURL = BASEURL + 'reports'
