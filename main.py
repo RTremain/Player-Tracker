@@ -1,13 +1,14 @@
 from datetime import datetime
 from types import NoneType
 from flask.templating import render_template
-import database.db_management, database.seedDB
+import database.db_management, database.seedDB, database.createDB
 from flask import Flask, json, jsonify, request
 from flask.wrappers import Response
 import requests
 from enum import Enum
 import requests_cache
 
+database.createDB()
 
 database.seedDB.seed_database()
 
