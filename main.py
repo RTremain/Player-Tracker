@@ -8,7 +8,7 @@ import requests
 from enum import Enum
 import requests_cache
 
-database.createDB()
+database.createDB.create_database()
 
 database.seedDB.seed_database()
 
@@ -62,6 +62,8 @@ def handle_report():
     if request.method == 'POST':
         data = request.form
         print(data.get('reportedBy'))
+        reporterDiscordId = data.get('reporterId')
+        #reporterId = database.db_management.get_user(reportedBy, reporterDiscordId).get('id')
         reportedBy = data.get('reportedBy')
         reportedName = data.get('reportedName')
         server = data.get('server')
@@ -76,7 +78,7 @@ def handle_report():
 
         print(report)
 
-        database.db_management.create_report(report)
+        database.db_management.create_report(report, reporterDiscordId)
 
         return {"Success: ": "Report Created Successfully"}, 200
 
