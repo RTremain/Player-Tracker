@@ -153,23 +153,18 @@ def get_reports(playerId, noOfReports = 0):
     return playerReports
 
 
-def create_report(report):
+def create_report(report, reporterId):
     con = sqlite3.connect('./database/playerTracker.db')
     cur = con.cursor()
 
 
     cur.execute("INSERT INTO reports(reportedBy, reportedId, reportedName, reportedCause, commendation, timeOfReport) VALUES(?, ?, ?, ?, ?, ?)", report)
-    print(report[4])
-    print(report[1])
-    match int(report[4]):
-        case 0:
-            numberOfReports = cur.execute("SELECT COUNT(*) FROM reports WHERE commendation=0 AND reportedId=?", str(report[1]),).fetchall()[0][0]
-            cur.execute("UPDATE players SET numberOfReports=? WHERE id=?", (numberOfReports, report[1]))
-            print(numberOfReports)
-        case 1:
-            numberOfCommendations = cur.execute("SELECT COUNT(*) FROM reports WHERE commendation=1 AND reportedId=?", str(report[1]),).fetchall()[0][0]
-            cur.execute("UPDATE players SET numberOfCommendations=? WHERE id=?", (numberOfCommendations, report[1]))
-            print(numberOfCommendations)
+    reportedId = str(report[1])
+    reportIdentifiers = [str(report[4]), str(report[1])]
+
+    numberOfReports = cur.execute("SELECT COUNT(*) FROM reports WHERE commendation=? AND reportedId=?", reportIdentifiers).fetchall()[0][0]
+    playerReportUpdate = [numberOfReports, reportedId]
+    cur.execute("UPDATE players SET numberOfReports=? WHERE id=?", playerReportUpdate)
 
 
     con.commit()
