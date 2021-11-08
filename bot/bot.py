@@ -45,23 +45,28 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-
     # Messages should start with ! to signify a command.
 
     if message.content.startswith('!'):
         messageContent = message.content
         commandType = message.content[1:].split(' ')[0]
-
+        
+        authorName = message.author.name + '#' + message.author.discriminator
+        authorId = message.author.id
 
 
         match commandType:
             case 'report':
                 print('Create a Report')
                 command = messageContent[8:].split(',')
-                print(command[0].strip())
-                print(command[1].strip())
-                print(command[2].strip())
-                params = {'reportedBy': 'testName', 'reportedName': command[0].strip(), 'server': command[1].strip(), 'cause': command[2].strip(), 'commendation': 0}
+                try:
+                    if command[0] == "" or command[0] == "" or command[1] == "" or command[2] == "" or command[0] == None or command[1] == None or command[2] == None:
+                        await message.channel.send('Malformed Request, please try again.')
+                        return
+                
+                except:
+                    await message.channel.send('An Error occurred, please try again.')
+                params = {'reportedBy': authorName, 'reporterId': authorId, 'reportedName': command[0].strip(), 'server': command[1].strip(), 'cause': command[2].strip(), 'commendation': 0}
                 print(params)
                 REPORTSURL = BASEURL + 'reports'
                 requests.post(REPORTSURL, data=params)
@@ -72,8 +77,12 @@ async def on_message(message):
                 print(command[0].strip())
                 print(command[1].strip())
                 print(command[2].strip())
-                if command[0] == "" | command[1] == "" | command[2] == "":
-                    await message.channel.send('Malformed Request, please try again.')
+                try:
+                    if command[0] == "" or command[0] == "" or command[1] == "" or command[2] == "" or command[0] == None or command[1] == None or command[2] == None:
+                        await message.channel.send('Malformed Request, please try again.')
+                        return
+                except:
+                    await message.channel.send('An Error occurred, please try again.')
                 params = {'reportedBy': 'testName', 'reportedName': command[0].strip(), 'server': command[1].strip(), 'cause': command[2].strip(), 'commendation': 1}
                 print(params)
                 REPORTSURL = BASEURL + 'reports'
@@ -84,6 +93,12 @@ async def on_message(message):
                 command = messageContent[7:].split(',')
                 print(command[0].strip())
                 print(command[1].strip())
+                try:
+                    if command[0] == "" or command[0] == "" or command[1] == "" or command[0] == None or command[1]:
+                        await message.channel.send('Malformed Request, please try again.')
+                        return
+                except:
+                    await message.channel.send('An Error occurred, please try again.')
 
                 params = {'playerName': command[0].strip(), 'server': command[1].strip()}
 
@@ -103,7 +118,7 @@ async def on_message(message):
             case 'help':
                 await message.channel.send('The current functional commands are !report, !commend, and !check.  For !report and !commend, the format is as follows:  !command Player Name, Server, Cause for report.')
                 await message.channel.send('For !check, the format is simply: !check Player Name, Server')
-            case _:
+            case _ :
                 await message.channel.send('Command was improperly formatted or missing.  Please try again.  If you don\'t know how to use this bot, try the !help command for instructions.')
 
 
