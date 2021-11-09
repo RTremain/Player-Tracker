@@ -73,7 +73,7 @@ def handle_report():
 
         print(report)
 
-        database.db_management.create_report(report, reporterDiscordId)
+        database.db_management.create_report(report)
 
         return {"Success: ": "Report Created Successfully"}, 200
 

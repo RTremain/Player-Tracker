@@ -153,19 +153,20 @@ def get_reports(playerId, noOfReports = 0):
     return playerReports
 
 
-def create_report(report, reporterId):
+def create_report(report):
     con = sqlite3.connect('./database/playerTracker.db')
     cur = con.cursor()
 
-
-    cur.execute("INSERT INTO reports(reportedBy, reportedId, reportedName, reportedCause, commendation, timeOfReport) VALUES(?, ?, ?, ?, ?, ?)", report)
+    cur.execute("INSERT INTO reports(reporterDiscordId, reportedId, reportedName, reportedCause, commendation, timeOfReport) VALUES(?, ?, ?, ?, ?, ?)", report)
     reportedId = str(report[1])
     reportIdentifiers = [str(report[4]), str(report[1])]
 
     numberOfReports = cur.execute("SELECT COUNT(*) FROM reports WHERE commendation=? AND reportedId=?", reportIdentifiers).fetchall()[0][0]
     playerReportUpdate = [numberOfReports, reportedId]
-    cur.execute("UPDATE players SET numberOfReports=? WHERE id=?", playerReportUpdate)
-
+    if int(report[4]) == 0:
+        cur.execute("UPDATE players SET numberOfReports=? WHERE id=?", playerReportUpdate)
+    else:
+        cur.execute("UPDATE players SET numberOfCommendations=? WHERE id=?", playerReportUpdate)
 
     con.commit()
     con.close()
@@ -181,7 +182,6 @@ def get_user(reportedBy, reporterDiscordId):
         "SELECT * FROM users WHERE userName=? AND discordId=?", (reportedBy, reporterDiscordId)).fetchone()
     userTableNames = [description[0] for description in cur.description]
 
-    
     if userInfo == None:
         print("User does not exist")
         create_user(reportedBy, reporterDiscordId)
@@ -197,7 +197,6 @@ def get_user(reportedBy, reporterDiscordId):
     con.close()
 
     user = dict(zip(userTableNames, list(userInfo)))
-
 
     return user
 
