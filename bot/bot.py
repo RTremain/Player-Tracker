@@ -66,11 +66,11 @@ async def on_message(message):
                 
                 except:
                     await message.channel.send('An Error occurred, please try again.')
-                params = {'reportedBy': authorName, 'reporterId': authorId, 'reportedName': command[0].strip(), 'server': command[1].strip(), 'cause': command[2].strip(), 'commendation': 0}
+                params = {'reportedBy': authorName, 'reporterId': authorId, 'reportedName': command[0].strip().lower(), 'server': command[1].strip().lower(), 'cause': command[2].strip().lower(), 'commendation': 0}
                 print(params)
                 REPORTSURL = BASEURL + 'reports'
                 requests.post(REPORTSURL, data=params)
-                await message.channel.send(f'{command[0].strip()} reported due to: {command[2].strip()}')
+                await message.channel.send(f'{command[0].strip().title()} reported due to: {command[2].strip()}')
             case 'commend':
                 print('Create a Commendation')
                 command = messageContent[8:].split(',')
@@ -83,11 +83,11 @@ async def on_message(message):
                         return
                 except:
                     await message.channel.send('An Error occurred, please try again.')
-                params = {'reportedBy': authorName, 'reporterId': authorId, 'reportedName': command[0].strip(), 'server': command[1].strip(), 'cause': command[2].strip(), 'commendation': 1}
+                params = {'reportedBy': authorName, 'reporterId': authorId, 'reportedName': command[0].strip().lower(), 'server': command[1].strip().lower(), 'cause': command[2].strip().lower(), 'commendation': 1}
                 print(params)
                 REPORTSURL = BASEURL + 'reports'
                 requests.post(REPORTSURL, data=params)
-                await message.channel.send(f'{command[0].strip()} commended due to: {command[2].strip()}')
+                await message.channel.send(f'{command[0].strip().title()} commended due to: {command[2].strip()}')
             case 'check':
                 print('Check Player')
                 command = messageContent[7:].split(',')
@@ -100,7 +100,7 @@ async def on_message(message):
                 except:
                     await message.channel.send('An Error occurred, please try again.')
 
-                params = {'playerName': command[0].strip(), 'server': command[1].strip()}
+                params = {'playerName': command[0].strip().lower(), 'server': command[1].strip().lower()}
 
                 PLAYERURL = BASEURL + 'player'
 
@@ -114,7 +114,7 @@ async def on_message(message):
 
                 numberOfReports = player.get('numberOfReports')
 
-                await message.channel.send(f'{playerName} from {server} server has {numberOfReports} reports and {numberOfCommendations} commendations.')
+                await message.channel.send(f'{playerName.title()} from {server.title()} server has {numberOfReports} reports and {numberOfCommendations} commendations.')
             case 'help':
                 await message.channel.send('The current functional commands are !report, !commend, and !check.  For !report and !commend, the format is as follows:  !command Player Name, Server, Cause for report.')
                 await message.channel.send('For !check, the format is simply: !check Player Name, Server')
