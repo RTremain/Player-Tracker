@@ -4,7 +4,7 @@ def create_database():
     
     con = sqlite3.connect('./database/playerTracker.db')
     cur = con.cursor()
-
+    
     cur.execute(
         '''CREATE TABLE IF NOT EXISTS ranks(
                 id integer primary key autoincrement,
@@ -26,7 +26,7 @@ def create_database():
     cur.execute(
         '''CREATE TABLE IF NOT EXISTS reports(
                 id integer primary key autoincrement,
-                reporterId integer not null,
+                reporterDiscordId text not null,
                 reportedId integer not null,
                 reportedName text not null,
                 reportedCause text not null,
