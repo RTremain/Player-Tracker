@@ -4,6 +4,8 @@ from flask import Flask, jsonify, request
 
 database.createDB.create_database()
 
+database.seedDB.clear_database()
+
 database.seedDB.seed_database()
 
 
@@ -33,29 +35,21 @@ def get_rank():
 
 @app.route('/api/player/server/<id>')
 def get_player_server(id):
-
-
-    player = database.db_management.get_player_by_id(id)
-
-    server = database.db_management.get_server(player)
-
-    return server, 200
+    return database.db_management.get_server(database.db_management.get_player_by_id(id)), 200
 
 @app.route('/api/player/reports/<id>')
 def get_player_reports(id):
     return jsonify(database.db_management.get_reports(id)), 200
 
-
 @app.route('/api/player/commendations/<id>')
 def get_player_commendations(id):
     return jsonify(database.db_management.get_commendations(id)), 200
 
-
 @app.route('/api/reports', methods = ['POST', 'GET'])
 def handle_report():
     if request.method == 'POST':
+
         data = request.form
-        print(data.get('reportedBy'))
         reportedBy = data.get('reportedBy')
         reporterDiscordId = data.get('reporterId')
         reportedBy = data.get('reportedBy')
