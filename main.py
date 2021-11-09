@@ -1,12 +1,6 @@
 from datetime import datetime
-from types import NoneType
-from flask.templating import render_template
 import database.db_management, database.seedDB, database.createDB
-from flask import Flask, json, jsonify, request
-from flask.wrappers import Response
-import requests
-from enum import Enum
-import requests_cache
+from flask import Flask, jsonify, request
 
 database.createDB.create_database()
 
@@ -62,9 +56,10 @@ def handle_report():
     if request.method == 'POST':
         data = request.form
         print(data.get('reportedBy'))
-        reporterDiscordId = data.get('reporterId')
-        #reporterId = database.db_management.get_user(reportedBy, reporterDiscordId).get('id')
         reportedBy = data.get('reportedBy')
+        reporterDiscordId = data.get('reporterId')
+        reportedBy = data.get('reportedBy')
+        reporterId = database.db_management.get_user(reportedBy, reporterDiscordId).get('id')
         reportedName = data.get('reportedName')
         server = data.get('server')
         reportedId = database.db_management.get_player(reportedName, server).get('id')
@@ -74,7 +69,7 @@ def handle_report():
 
 
         
-        report = [reportedBy, reportedId, reportedName, reportedCause, commendationStatus, timeOfReport]
+        report = [reporterId, reportedId, reportedName, reportedCause, commendationStatus, timeOfReport]
 
         print(report)
 
