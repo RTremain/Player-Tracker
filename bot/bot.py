@@ -83,7 +83,7 @@ async def on_message(message):
                         return
                 except:
                     await message.channel.send('An Error occurred, please try again.')
-                params = {'reportedBy': 'testName', 'reportedName': command[0].strip(), 'server': command[1].strip(), 'cause': command[2].strip(), 'commendation': 1}
+                params = {'reportedBy': authorName, 'reporterId': authorId, 'reportedName': command[0].strip(), 'server': command[1].strip(), 'cause': command[2].strip(), 'commendation': 1}
                 print(params)
                 REPORTSURL = BASEURL + 'reports'
                 requests.post(REPORTSURL, data=params)
@@ -94,7 +94,7 @@ async def on_message(message):
                 print(command[0].strip())
                 print(command[1].strip())
                 try:
-                    if command[0] == "" or command[0] == "" or command[1] == "" or command[0] == None or command[1]:
+                    if command[0] == "" or command[1] == "" or command[0] == None or command[1] == None:
                         await message.channel.send('Malformed Request, please try again.')
                         return
                 except:
