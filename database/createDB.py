@@ -26,7 +26,7 @@ def create_database():
     cur.execute(
         '''CREATE TABLE IF NOT EXISTS reports(
                 id integer primary key autoincrement,
-                reportedBy text not null,
+                reporterId integer not null,
                 reportedId integer not null,
                 reportedName text not null,
                 reportedCause text not null,
