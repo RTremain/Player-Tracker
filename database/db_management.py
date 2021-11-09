@@ -172,3 +172,44 @@ def create_report(report, reporterId):
     print("report created")
 
     return {"Success: ": "Report Created Successfully"}
+
+def get_user(reportedBy, reporterDiscordId):
+    con = sqlite3.connect('./database/playerTracker.db')
+    cur = con.cursor();
+
+    userInfo = cur.execute(
+        "SELECT * FROM users WHERE userName=? AND discordId=?", (reportedBy, reporterDiscordId)).fetchone()
+    userTableNames = [description[0] for description in cur.description]
+
+    
+    if userInfo == None:
+        print("User does not exist")
+        create_user(reportedBy, reporterDiscordId)
+        print("User Created")
+    
+    userInfo = cur.execute(
+        "SELECT * FROM users WHERE userName=? AND discordId=?", (reportedBy, reporterDiscordId)).fetchone()
+    userTableNames = [description[0] for description in cur.description]
+
+    print(userInfo)
+
+    con.commit()
+    con.close()
+
+    user = dict(zip(userTableNames, list(userInfo)))
+
+
+    return user
+
+def create_user(reportedBy, reporterDiscordId):
+    con = sqlite3.connect('./database/playerTracker.db')
+    cur = con.cursor()
+    print(reportedBy, reporterDiscordId)
+    userInfo = [reportedBy, reporterDiscordId]
+    cur.execute("INSERT INTO users(userName, discordId) VALUES(?, ?)", userInfo )
+
+    con.commit()
+    con.close()
+
+    return {"Success: ": "User Created Successfully"}
+
